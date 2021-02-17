@@ -19,14 +19,14 @@ const WalletContext = React.createContext<null | WalletContextValues>(null);
 
 export function WalletProvider({ children }) {
   const { endpoint } = useConnectionConfig();
-
   const [savedProviderUrl, setProviderUrl] = useLocalStorageState(
     'walletProvider',
     'https://www.sollet.io',
   );
+  
   let providerUrl;
   if (!savedProviderUrl) {
-    providerUrl = 'https://www.sollet.io';
+    providerUrl = 'https://wallet.doce.finance';
   } else {
     providerUrl = savedProviderUrl;
   }

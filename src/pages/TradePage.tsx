@@ -334,12 +334,12 @@ const RenderNormal = ({ onChangeOrderRef, onPrice, onSize }) => {
         flexWrap: 'nowrap',
       }}
     >
-      <Col flex="auto" style={{ height: '100%', display: 'flex' }}>
-        <UserInfoTable />
-      </Col>
       <Col flex={'360px'} style={{ height: '100%' }}>
         <Orderbook smallScreen={false} onPrice={onPrice} onSize={onSize} />
         <TradesTable smallScreen={false} />
+      </Col>
+      <Col flex="auto" style={{ height: '100%', display: 'flex' }}>
+        <UserInfoTable />
       </Col>
       <Col
         flex="400px"
