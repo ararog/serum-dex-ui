@@ -34,7 +34,7 @@ export interface ChartContainerState {}
 export const TVChartContainer = () => {
   // @ts-ignore
   const defaultProps: ChartContainerProps = {
-    symbol: 'BTC/USDC',
+    symbol: 'USDT/USDC',
     interval: '60' as ResolutionString,
     theme: 'Dark',
     containerId: 'tv_chart_container',

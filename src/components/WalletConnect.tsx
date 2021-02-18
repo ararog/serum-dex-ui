@@ -14,7 +14,7 @@ export default function WalletConnect() {
         type="text"
         size="large"
         onClick={connected ? wallet.disconnect : wallet.connect}
-        style={{ color: '#2abdd2' }}
+        style={{ color: '#945BA2' }}
       >
         <UserOutlined />
         {!connected ? 'Connect wallet' : 'Disconnect'}
@@ -26,7 +26,7 @@ export default function WalletConnect() {
           title="Wallet public key"
           trigger="click"
         >
-          <InfoCircleOutlined style={{ color: '#2abdd2' }} />
+          <InfoCircleOutlined style={{ color: '#945BA2' }} />
         </Popover>
       )}
     </React.Fragment>

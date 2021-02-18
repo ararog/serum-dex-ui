@@ -14,6 +14,7 @@ import {
 } from '../utils/markets';
 import TradeForm from '../components/TradeForm';
 import TradesTable from '../components/TradesTable';
+import { TVChartContainer } from '../components/TradingView';
 import LinkAddress from '../components/LinkAddress';
 import DeprecatedMarketsInstructions from '../components/DeprecatedMarketsInstructions';
 import {
@@ -175,13 +176,13 @@ function TradePageInner() {
                 title="Market address"
                 trigger="click"
               >
-                <InfoCircleOutlined style={{ color: '#2abdd2' }} />
+                <InfoCircleOutlined style={{ color: '#945BA2' }} />
               </Popover>
             </Col>
           ) : null}
           <Col>
             <PlusCircleOutlined
-              style={{ color: '#2abdd2' }}
+              style={{ color: '#945BA2' }}
               onClick={() => setAddMarketVisible(true)}
             />
           </Col>
@@ -338,7 +339,10 @@ const RenderNormal = ({ onChangeOrderRef, onPrice, onSize }) => {
         <Orderbook smallScreen={false} onPrice={onPrice} onSize={onSize} />
         <TradesTable smallScreen={false} />
       </Col>
-      <Col flex="auto" style={{ height: '100%', display: 'flex' }}>
+      <Col flex="auto" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Col style={{ height: '450px' }}>
+            <TVChartContainer />
+        </Col>            
         <UserInfoTable />
       </Col>
       <Col
