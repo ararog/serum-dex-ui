@@ -14,7 +14,6 @@ import {
 } from '../utils/markets';
 import TradeForm from '../components/TradeForm';
 import TradesTable from '../components/TradesTable';
-import { TVChartContainer } from '../components/TradingView';
 import LinkAddress from '../components/LinkAddress';
 import DeprecatedMarketsInstructions from '../components/DeprecatedMarketsInstructions';
 import {
@@ -25,6 +24,8 @@ import {
 import CustomMarketDialog from '../components/CustomMarketDialog';
 import { notify } from '../utils/notifications';
 import { useHistory, useParams } from 'react-router-dom';
+import TradingViewWidget, { Themes } from 'react-tradingview-widget';
+import { formatMarketName } from '../components/TradingView/utils';
 
 const { Option, OptGroup } = Select;
 
@@ -108,6 +109,7 @@ function TradePageInner() {
       (size) => changeOrderRef.current && changeOrderRef.current({ size }),
       [],
     ),
+    marketName: formatMarketName(marketName),
   };
   const component = (() => {
     if (handleDeprecated) {
@@ -327,11 +329,15 @@ const DeprecatedMarketsPage = ({ switchToLiveMarkets }) => {
   );
 };
 
-const RenderNormal = ({ onChangeOrderRef, onPrice, onSize }) => {
+const RenderNormal = ({ onChangeOrderRef, onPrice, onSize, marketName }) => {
+  let ticker = 'FTX:' + marketName;
+  if (marketName === 'ALEPHUSDT' || marketName === 'ALEPHUSD') {
+    ticker = 'KUCOIN:ALEPHUSDT';
+  }    
   return (
     <Row
       style={{
-        minHeight: '900px',
+        minHeight: '800px',
         flexWrap: 'nowrap',
       }}
     >
@@ -340,9 +346,14 @@ const RenderNormal = ({ onChangeOrderRef, onPrice, onSize }) => {
         <TradesTable smallScreen={false} />
       </Col>
       <Col flex="auto" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <Col style={{ height: '450px' }}>
-            <TVChartContainer />
-        </Col>            
+        <div style={{ margin: '5px', height: '450px' }}>
+          <TradingViewWidget
+            symbol={ticker}
+            theme={Themes.DARK}
+            locale="en"
+            autosize
+          />
+        </div>
         <UserInfoTable />
       </Col>
       <Col
@@ -356,9 +367,22 @@ const RenderNormal = ({ onChangeOrderRef, onPrice, onSize }) => {
   );
 };
 
-const RenderSmall = ({ onChangeOrderRef, onPrice, onSize }) => {
+const RenderSmall = ({ onChangeOrderRef, onPrice, onSize, marketName }) => {
+  let ticker = 'FTX:' + marketName;
+  if (marketName === 'ALEPHUSDT' || marketName === 'ALEPHUSD') {
+    ticker = 'KUCOIN:ALEPHUSDT';
+  }    
   return (
     <>
+      <Row style={{ width: '100%' }}>
+        <TradingViewWidget
+            symbol={ticker}
+            theme={Themes.DARK}
+            locale="en"
+            autosize
+        />
+        <UserInfoTable />
+      </Row>
       <Row
         style={{
           height: '900px',
@@ -392,9 +416,26 @@ const RenderSmall = ({ onChangeOrderRef, onPrice, onSize }) => {
   );
 };
 
-const RenderSmaller = ({ onChangeOrderRef, onPrice, onSize }) => {
+const RenderSmaller = ({ onChangeOrderRef, onPrice, onSize, marketName }) => {
+  let ticker = 'FTX:' + marketName;
+  if (marketName === 'ALEPHUSDT' || marketName === 'ALEPHUSD') {
+    ticker = 'KUCOIN:ALEPHUSDT';
+  }    
   return (
     <>
+      <Row>
+        <Col
+          flex="auto"
+          style={{ width: '100%', height: '300px', display: 'flex' }}
+        >
+          <TradingViewWidget
+            symbol={ticker}
+            theme={Themes.DARK}
+            locale="en"
+            autosize
+          />
+        </Col>
+      </Row>    
       <Row>
         <Col xs={24} sm={12} style={{ height: '100%', display: 'flex' }}>
           <TradeForm style={{ flex: 1 }} setChangeOrderRef={onChangeOrderRef} />
