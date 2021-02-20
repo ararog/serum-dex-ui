@@ -10,9 +10,9 @@ const footerElements = [
     description: 'Serum Developer Resources',
     link: helpUrls.developerResources,
   },
-  { description: 'Discord', link: helpUrls.discord },
+  { description: 'E-mail', link: helpUrls.contactEmail },
+  { description: 'Twitter', link: helpUrls.twitter },
   { description: 'Telegram', link: helpUrls.telegram },
-  { description: 'Project Serum', link: helpUrls.projectSerum },
   { description: 'Solana Network', link: helpUrls.solanaBeach },
 ];
 
