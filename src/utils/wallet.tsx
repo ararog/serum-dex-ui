@@ -11,6 +11,7 @@ export const WALLET_PROVIDERS = [
   { name: 'Doce', url: 'https://wallet.doce.finance' },
   { name: 'Solong', url: 'https://solongwallet.com/' },
   { name: 'Bonfida', url: 'https://bonfida.com/wallet' },
+  { name: 'MathWallet', url: 'https://www.mathwallet.org' }
 ];
 
 const WalletContext = React.createContext<null | WalletContextValues>(null);
@@ -24,7 +25,7 @@ export function WalletProvider({ children }) {
   
   let providerUrl;
   if (!savedProviderUrl) {
-    providerUrl = 'https://wallet.doce.finance';
+    providerUrl = 'https://www.sollet.io';
   } else {
     providerUrl = savedProviderUrl;
   }
