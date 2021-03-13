@@ -17,6 +17,7 @@ import {
   SolongWalletAdapter,
   PhantomWalletAdapter,
   MathWalletAdapter,
+  SolletExtensionAdapter,
 } from '../wallet-adapters';
 
 const ASSET_URL =
@@ -26,6 +27,12 @@ export const WALLET_PROVIDERS = [
     name: 'sollet.io',
     url: 'https://www.sollet.io',
     icon: `${ASSET_URL}/sollet.svg`,
+  },
+  {
+    name: 'Sollet Extension',
+    url: 'https://www.sollet.io/extension',
+    icon: `${ASSET_URL}/sollet.svg`,
+    adapter: SolletExtensionAdapter as any,
   },
   {
     name: 'Ledger',
@@ -66,24 +73,38 @@ export function WalletProvider({ children }) {
     [providerUrl],
   );
 
-  const wallet = useMemo(
-    function () {
-      if (provider) {
-        return new (provider.adapter || Wallet)(
+  let [wallet, setWallet] = useState<WalletAdapter|undefined>(undefined);
+
+  useEffect(() => {
+    if (provider) {
+      const updateWallet = () => {
+        wallet = new (provider.adapter || Wallet)(
           providerUrl,
           endpoint,
         ) as WalletAdapter;
+        setWallet(wallet);
       }
-    },
-    [provider, providerUrl, endpoint],
-  );
+
+      if (document.readyState !== 'complete') {
+        // wait to ensure that browser extensions are loaded
+        const listener = () => {
+          updateWallet();
+          window.removeEventListener('load', listener);
+        };
+        window.addEventListener('load', listener);
+        return () => window.removeEventListener('load', listener);
+      } else {
+        updateWallet();
+      }
+    }
+  }, [provider, providerUrl, endpoint]);
 
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
     if (wallet) {
       wallet.on('connect', () => {
-        if (wallet.publicKey) {
+        if (wallet?.publicKey) {
           console.log('connected');
           localStorage.removeItem('feeDiscountKey');
           setConnected(true);
@@ -107,6 +128,15 @@ export function WalletProvider({ children }) {
       });
 
       wallet.on('disconnect', () => {
+        // TODO MOVE INTO ADAPTER
+        // @ts-ignore
+        if (wallet?._handlerAdded) {
+          // @ts-ignore
+          window.removeEventListener('message', wallet._handleMessage);
+          window.removeEventListener('beforeunload', wallet.disconnect);
+          // @ts-ignore
+          wallet._handlerAdded = false;
+        }
         setConnected(false);
         notify({
           message: 'Wallet update',
@@ -118,7 +148,7 @@ export function WalletProvider({ children }) {
 
     return () => {
       setConnected(false);
-      if (wallet) {
+      if (wallet && wallet.connected) {
         wallet.disconnect();
         setConnected(false);
       }
