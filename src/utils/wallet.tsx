@@ -78,11 +78,11 @@ export function WalletProvider({ children }) {
   useEffect(() => {
     if (provider) {
       const updateWallet = () => {
-        wallet = new (provider.adapter || Wallet)(
+        let myWallet = new (provider.adapter || Wallet)(
           providerUrl,
           endpoint,
         ) as WalletAdapter;
-        setWallet(wallet);
+        setWallet(myWallet);
       }
 
       if (document.readyState !== 'complete') {
