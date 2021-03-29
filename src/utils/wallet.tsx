@@ -78,11 +78,13 @@ export function WalletProvider({ children }) {
   useEffect(() => {
     if (provider) {
       const updateWallet = () => {
-        let myWallet = new (provider.adapter || Wallet)(
+        // hack to also update wallet synchronously in case it disconnects
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        wallet = new (provider.adapter || Wallet)(
           providerUrl,
           endpoint,
         ) as WalletAdapter;
-        setWallet(myWallet);
+        setWallet(wallet);
       }
 
       if (document.readyState !== 'complete') {
